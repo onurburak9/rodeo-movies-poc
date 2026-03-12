@@ -21,6 +21,9 @@ export interface AIAnalysis {
   title: string;
   year: number | null;
   confidence: 'high' | 'medium' | 'low';
+  source: string;
+  provider: 'openai' | 'gemini';
+  fallbackUsed: boolean;
 }
 
 function App() {

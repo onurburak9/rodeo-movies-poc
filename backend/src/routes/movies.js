@@ -4,6 +4,7 @@ import {
   getMovie,
   searchMovies,
   getRecentMovies,
+  checkAIHealth,
 } from '../controllers/movieController.js';
 
 const router = express.Router();
@@ -16,6 +17,9 @@ router.get('/search', searchMovies);
 
 // GET /api/movies/recent - Get recent additions
 router.get('/recent', getRecentMovies);
+
+// GET /api/movies/health/ai - Check AI services health
+router.get('/health/ai', checkAIHealth);
 
 // GET /api/movies/:id - Get movie details
 router.get('/:id', getMovie);

@@ -1,5 +1,5 @@
 import { Movie, Screenshot } from '../models/movie.js';
-import { analyzeImage } from '../services/aiService.js';
+import { analyzeImage, checkAIServices } from '../services/aiService.js';
 import { searchMovie } from '../services/tmdbService.js';
 
 /**
@@ -134,9 +134,27 @@ export const getRecentMovies = async (req, res) => {
   }
 };
 
+/**
+ * Check AI services health status
+ */
+export const checkAIHealth = async (req, res) => {
+  try {
+    const status = await checkAIServices();
+    return res.json({
+      status: 'ok',
+      services: status,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('AI Health Check Error:', error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 export default {
   analyzeScreenshot,
   getMovie,
   searchMovies,
   getRecentMovies,
+  checkAIHealth,
 };

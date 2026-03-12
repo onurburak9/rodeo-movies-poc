@@ -12,6 +12,9 @@ function MovieResult({ movie, aiAnalysis }: MovieResultProps) {
     low: 'text-orange-400',
   }[aiAnalysis.confidence];
 
+  const providerLabel = aiAnalysis.provider === 'openai' ? 'GPT-4o-mini' : 'Gemini';
+  const sourceLabel = aiAnalysis.source.charAt(0).toUpperCase() + aiAnalysis.source.slice(1);
+
   const formatRuntime = (minutes: number) => {
     if (!minutes) return 'N/A';
     const hours = Math.floor(minutes / 60);
@@ -22,9 +25,16 @@ function MovieResult({ movie, aiAnalysis }: MovieResultProps) {
   return (
     <div className="bg-gray-800/50 border border-gray-700 rounded-2xl overflow-hidden">
       <div className="bg-gradient-to-r from-green-900/50 to-green-800/30 px-4 py-2 flex items-center justify-between">
-        <span className="text-green-400 text-sm font-medium flex items-center gap-2">
-          <span>✓</span> Movie Identified
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-green-400 text-sm font-medium flex items-center gap-2">
+            <span>✓</span> Movie Identified
+          </span>
+          {aiAnalysis.fallbackUsed && (
+            <span className="bg-blue-500/20 text-blue-400 text-xs px-2 py-0.5 rounded-full" title="OpenAI confidence was low, used Gemini as fallback">
+              🤖 Fallback
+            </span>
+          )}
+        </div>
         <span className={`text-xs font-medium ${confidenceColor}`}>
           {aiAnalysis.confidence} confidence
         </span>
@@ -123,8 +133,19 @@ function MovieResult({ movie, aiAnalysis }: MovieResultProps) {
           </div>
         )}
 
+        {/* AI Analysis Info */}
+        <div className="mt-6 pt-4 border-t border-gray-700/50">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <div className="flex items-center gap-3">
+              <span>Analyzed by <span className="text-gray-400">{providerLabel}</span></span>
+              <span>•</span>
+              <span>Source: <span className="text-gray-400">{sourceLabel}</span></span>
+            </div>
+          </div>
+        </div>
+
         {/* Actions */}
-        <div className="mt-6 pt-6 border-t border-gray-700 flex gap-3">
+        <div className="mt-4 pt-4 border-t border-gray-700 flex gap-3">
           <button className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-medium transition-colors">
             Add to Watchlist
           </button>
